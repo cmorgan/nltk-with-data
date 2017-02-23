@@ -1,0 +1,34 @@
+{%set name = "nltk" %}
+{%set version = "3.2.1" %}
+{%set hash_type = "sha256" %}
+{%set hash_val = "793ead6ef526a1e4c747e9635dc2d3753f4a410f18e8fa13f830dfcc0350727d" %}
+
+package:
+  name: {{ name }}-with-data
+  version: {{ version }}
+
+source:
+  fn: {{ name }}-{{ version }}.zip
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.zip
+  {{ hash_type }}: {{ hash_val }}
+  patches:
+      # Add conda PREFIX to where NLTK searches for data
+      - data.py.patch
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - python
+    - setuptools
+  run:
+    - python
+
+test:
+  imports:
+    - nltk
+  files:
+    - test_data.py
+  commands:
+    - python test_data.py
